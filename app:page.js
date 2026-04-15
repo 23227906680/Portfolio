@@ -1,155 +1,337 @@
-import React, { useState, useRef } from 'react';
-import { Menu, X, Mail, Phone, Linkedin } from 'lucide-react';
-
-export default function Portfolio() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
-  
-  const sectionRefs = {
-    home: useRef(null),
-    profil: useRef(null),
-    competences: useRef(null),
-    experiences: useRef(null),
-    formation: useRef(null),
-    projets: useRef(null),
-    certifications: useRef(null),
-    contact: useRef(null)
-  };
-
-  const scrollToSection = (sectionId) => {
-    const element = sectionRefs[sectionId]?.current;
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(sectionId);
-      setIsMenuOpen(false);
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saad ZERATI — Élève Ingénieur Performance Industrielle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060608;
+      --card: #111117;
+      --card2: #15151d;
+      --border: #1a1a26;
+      --border2: #222235;
+      --accent: #c8f03c;
+      --accent-dim: rgba(200,240,60,0.1);
+      --accent-glow: rgba(200,240,60,0.22);
+      --blue: #4d9fff;
+      --blue-dim: rgba(77,159,255,0.1);
+      --pink: #ff6b9d;
+      --pink-dim: rgba(255,107,157,0.1);
+      --text: #d4d4e8;
+      --muted: #666688;
+      --white: #f0f0ff;
     }
-  };
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden;}
+    body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(200,240,60,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,240,60,0.018) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+    .blob{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0;animation:drift 25s ease-in-out infinite alternate;}
+    .blob1{width:700px;height:700px;background:var(--accent);opacity:0.04;top:-300px;left:-200px;}
+    .blob2{width:500px;height:500px;background:var(--blue);opacity:0.06;bottom:-200px;right:-100px;animation-delay:-10s;}
+    .blob3{width:400px;height:400px;background:var(--pink);opacity:0.04;top:40%;left:30%;animation-delay:-5s;}
+    @keyframes drift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(50px,70px) scale(1.08);}}
+    .cursor-glow{position:fixed;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(200,240,60,0.04),transparent 70%);pointer-events:none;z-index:1;transform:translate(-50%,-50%);transition:left 0.12s ease,top 0.12s ease;}
 
-  const sections = ['profil', 'competences', 'experiences', 'formation', 'projets', 'certifications', 'contact'];
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:68px;background:rgba(6,6,8,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+    .nav-logo{font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:var(--white);}
+    .nav-logo em{color:var(--accent);font-style:normal;}
+    .nav-links{display:flex;gap:32px;align-items:center;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;transition:color 0.2s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform 0.2s;}
+    .nav-links a:hover{color:var(--accent);}
+    .nav-links a:hover::after{transform:scaleX(1);}
+    .nav-cta{background:var(--accent)!important;color:#000!important;padding:8px 20px!important;border-radius:6px!important;font-weight:600!important;}
+    .nav-cta:hover{background:#d8ff4a!important;box-shadow:0 0 20px var(--accent-glow)!important;}
 
-  return (
-    <div className="bg-black text-white">
-      
-      {/* HEADER */}
-      <header className="sticky top-0 bg-black border-b border-white/10 z-50">
-        <div className="max-w-6xl mx-auto flex justify-between p-4">
-          <button onClick={() => scrollToSection('home')} className="font-bold">
-            A.Zerati
-          </button>
+    section{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:120px 48px;}
 
-          <nav className="hidden md:flex gap-6">
-            {sections.map(section => (
-              <button key={section} onClick={() => scrollToSection(section)}>
-                {section}
-              </button>
-            ))}
-          </nav>
+    #hero{min-height:100vh;display:grid;grid-template-columns:1fr 300px;align-items:center;gap:60px;padding-top:100px;}
+    .hero-status{display:inline-flex;align-items:center;gap:10px;background:var(--accent-dim);border:1px solid rgba(200,240,60,0.2);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border-radius:4px;margin-bottom:32px;opacity:0;animation:sIn 0.9s 0.1s forwards;}
+    .sdot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:blink 1.5s ease-in-out infinite;box-shadow:0 0 8px var(--accent);}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(56px,7.5vw,100px);font-weight:900;line-height:0.95;letter-spacing:-2px;color:var(--white);opacity:0;animation:sIn 0.9s 0.3s forwards;}
+    h1 .stroke{-webkit-text-stroke:1.5px var(--accent);color:transparent;}
+    .hero-desc{font-size:16px;color:var(--muted);font-weight:300;line-height:1.85;margin-top:28px;max-width:580px;opacity:0;animation:sIn 0.9s 0.5s forwards;border-left:2px solid var(--border2);padding-left:20px;}
+    .hero-desc strong{color:var(--text);font-weight:500;}
+    .hero-actions{display:flex;gap:14px;margin-top:40px;opacity:0;animation:sIn 0.9s 0.7s forwards;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.25s;cursor:pointer;border:none;letter-spacing:0.3px;}
+    .btn-p{background:var(--accent);color:#000;}
+    .btn-p:hover{background:#d8ff4a;transform:translateY(-2px);box-shadow:0 12px 40px var(--accent-glow);}
+    .btn-o{background:transparent;color:var(--text);border:1px solid var(--border2);}
+    .btn-o:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+    .hero-scroll{margin-top:56px;opacity:0;animation:sIn 0.9s 1s forwards;display:flex;align-items:center;gap:12px;}
+    .scroll-line{width:40px;height:1px;background:var(--border2);}
+    .scroll-text{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+    @keyframes sIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
-            {isMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </header>
+    .hero-card{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:32px;opacity:0;animation:sIn 0.9s 0.9s forwards;}
+    .hc-avatar{width:72px;height:72px;background:linear-gradient(135deg,var(--accent),var(--blue));border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#000;margin-bottom:20px;}
+    .hc-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px;}
+    .hc-role{font-size:12px;color:var(--muted);margin-bottom:20px;}
+    .hc-div{height:1px;background:var(--border);margin-bottom:20px;}
+    .hc-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .hc-row:last-child{margin-bottom:0;}
+    .hc-lbl{font-size:12px;color:var(--muted);}
+    .hc-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);font-weight:500;}
 
-      <main>
+    .eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+    .ey-n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
+    .ey-l{flex:1;height:1px;background:var(--border2);max-width:80px;}
+    .ey-t{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;}
+    h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,52px);font-weight:900;color:var(--white);letter-spacing:-1px;margin-bottom:48px;}
+    h2 em{color:var(--accent);font-style:normal;}
 
-        {/* HERO */}
-        <section ref={sectionRefs.home} className="min-h-screen flex items-center justify-center text-center">
-          <div>
-            <h1 className="text-6xl font-bold">
-              ZERATI <span className="text-lime-400">SAAD</span>
-            </h1>
+    .about-grid{display:grid;grid-template-columns:3fr 2fr;gap:48px;}
+    .about-body{color:var(--muted);font-weight:300;line-height:1.9;}
+    .about-body p{margin-bottom:18px;}
+    .about-body strong{color:var(--text);font-weight:500;}
+    .meta-list{display:flex;flex-direction:column;gap:10px;}
+    .meta-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:10px;transition:all 0.2s;}
+    .meta-item:hover{border-color:var(--border2);background:var(--card2);}
+    .meta-ico{font-size:18px;width:38px;height:38px;background:var(--accent-dim);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .meta-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+    .meta-val{font-size:13px;color:var(--text);font-weight:500;}
+    .meta-val a{color:var(--accent);text-decoration:none;}
 
-            <p className="mt-4 text-gray-400 max-w-xl mx-auto">
-              Élève-ingénieur en dernière année à Centrale Casablanca, je recherche une alternance en Supply Chain. Passionné par la gestion des flux, l’optimisation des stocks et l’analyse de données.
-            </p>
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+    .sk-block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all 0.3s;position:relative;overflow:hidden;}
+    .sk-block::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;opacity:0;transition:opacity 0.3s;}
+    .sk-block.g::before{background:linear-gradient(90deg,var(--accent),transparent);}
+    .sk-block.b::before{background:linear-gradient(90deg,var(--blue),transparent);}
+    .sk-block.p::before{background:linear-gradient(90deg,var(--pink),transparent);}
+    .sk-block:hover{border-color:var(--border2);transform:translateY(-4px);}
+    .sk-block:hover::before{opacity:1;}
+    .sk-head{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+    .sk-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .g .sk-ico{background:var(--accent-dim);}
+    .b .sk-ico{background:var(--blue-dim);}
+    .p .sk-ico{background:var(--pink-dim);}
+    .sk-name{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+    .g .sk-name{color:var(--accent);}
+    .b .sk-name{color:var(--blue);}
+    .p .sk-name{color:var(--pink);}
+    .tags{display:flex;flex-wrap:wrap;gap:7px;}
+    .tag{font-size:12px;padding:4px 11px;border-radius:5px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--muted);transition:all 0.2s;cursor:default;}
+    .tag:hover{background:var(--accent-dim);border-color:rgba(200,240,60,0.3);color:var(--accent);}
 
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="mt-6 px-6 py-3 bg-lime-400 text-black rounded"
-            >
-              Me contacter
-            </button>
-          </div>
-        </section>
+    .timeline{position:relative;}
+    .tl-rail{position:absolute;left:0;top:16px;bottom:16px;width:1px;background:linear-gradient(to bottom,var(--accent),rgba(200,240,60,0.04));}
+    .tl-item{position:relative;padding:0 0 44px 40px;}
+    .tl-dot{position:absolute;left:-5px;top:14px;width:11px;height:11px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 3px rgba(200,240,60,0.15),0 0 12px rgba(200,240,60,0.4);}
+    .tl-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 32px;transition:all 0.3s;}
+    .tl-card:hover{border-color:var(--border2);transform:translateX(6px);}
+    .tl-type{display:inline-block;font-size:10px;padding:2px 9px;background:var(--pink-dim);border:1px solid rgba(255,107,157,0.2);color:var(--pink);border-radius:3px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+    .tl-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:12px;flex-wrap:wrap;}
+    .tl-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--white);}
+    .tl-badge{font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 12px;background:var(--accent-dim);border:1px solid rgba(200,240,60,0.2);color:var(--accent);border-radius:4px;white-space:nowrap;}
+    .tl-co{font-size:13px;color:var(--blue);font-weight:500;margin-bottom:14px;}
+    .tl-desc{color:var(--muted);font-size:14px;line-height:1.75;font-weight:300;}
 
-        {/* PROFIL */}
-        <section ref={sectionRefs.profil} className="p-10 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Profil</h2>
-          <p>
-            Étudiant en dernière année à Centrale Casablanca, après un parcours en CPGE (PCSI/PSI). Passionné par la gestion des flux et l’optimisation des processus.
-          </p>
-        </section>
+    .edu-list{display:flex;flex-direction:column;gap:14px;}
+    .edu-item{display:flex;gap:20px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 28px;transition:all 0.25s;}
+    .edu-ico{width:52px;height:52px;background:var(--blue-dim);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+    .edu-deg{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px;}
+    .edu-sch{font-size:13px;color:var(--blue);font-weight:500;}
+    .edu-per{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
 
-        {/* COMPETENCES */}
-        <section ref={sectionRefs.competences} className="p-10 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Compétences</h2>
-          <ul className="space-y-2">
-            <li>Gestion des flux</li>
-            <li>Analyse de données</li>
-            <li>Python / SQL</li>
-            <li>Power BI / Excel</li>
-            <li>Docker / Linux</li>
-          </ul>
-        </section>
+    .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+    .proj-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all 0.3s;display:flex;flex-direction:column;}
+    .proj-card.wide{grid-column:span 2;}
+    .proj-card:hover{border-color:rgba(200,240,60,0.22);transform:translateY(-5px);}
+    .proj-cat{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+    .proj-cat::before{content:'';width:16px;height:1px;background:var(--accent);}
+    .proj-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:12px;}
+    .proj-desc{color:var(--muted);font-size:13px;line-height:1.7;flex:1;margin-bottom:20px;}
+    .proj-stack{display:flex;flex-wrap:wrap;gap:6px;}
+    .stag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;background:rgba(77,159,255,0.07);border:1px solid rgba(77,159,255,0.14);color:var(--blue);border-radius:4px;}
 
-        {/* EXPERIENCES */}
-        <section ref={sectionRefs.experiences} className="p-10 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Expériences</h2>
+    .contact-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:72px 80px;text-align:center;}
+    .contact-box h3{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:900;color:var(--white);margin-bottom:16px;}
+    .contact-box h3 em{color:var(--accent);font-style:normal;}
 
-          <div className="mb-6">
-            <h3 className="font-bold">Creative Channel — Paris</h3>
-            <p>R&D (2026 - Présent)</p>
-          </div>
+    footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:0 auto;}
 
-          <div className="mb-6">
-            <h3 className="font-bold">CDG — Rabat</h3>
-            <p>Python (2025)</p>
-          </div>
+    .reveal{opacity:0;transform:translateY(28px);transition:all 0.75s cubic-bezier(0.16,1,0.3,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
 
-          <div>
-            <h3 className="font-bold">OCP — Khouribga</h3>
-            <p>Maintenance (2024)</p>
-          </div>
-        </section>
+    @media(max-width:900px){
+      nav{padding:0 24px;} .nav-links{display:none;}
+      section{padding:80px 24px;}
+      #hero{grid-template-columns:1fr;} .hero-card{display:none;}
+      .about-grid,.skills-grid,.proj-grid{grid-template-columns:1fr;}
+      .proj-card.wide{grid-column:span 1;}
+      .contact-box{padding:40px 28px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-glow" id="cg"></div>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
 
-        {/* FORMATION */}
-        <section ref={sectionRefs.formation} className="p-10 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Formation</h2>
-          <p>Cycle ingénieur — Centrale Casablanca (2023–2026)</p>
-          <p>CPGE — PCSI/PSI (2021–2023)</p>
-        </section>
-
-        {/* PROJETS */}
-        <section ref={sectionRefs.projets} className="p-10 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Projets</h2>
-          <p>Docker / DevOps</p>
-          <p>Computer Vision (YOLO)</p>
-        </section>
-
-        {/* CONTACT */}
-        <section ref={sectionRefs.contact} className="p-10 text-center">
-          <h2 className="text-3xl font-bold mb-6">Contact</h2>
-
-          <div className="space-y-4">
-            <a href="mailto:saad.zerati@centrale-casablanca.ma">
-              <Mail /> saad.zerati@centrale-casablanca.ma
-            </a>
-
-            <br />
-
-            <a href="tel:+33745754127">
-              <Phone /> +33 7 45 75 41 27
-            </a>
-          </div>
-        </section>
-
-      </main>
-
-      <footer className="text-center p-6 text-gray-500">
-        © 2026 Zerati Saad
-      </footer>
-
+  <nav>
+    <div class="nav-logo">S<em>.</em>ZERATI</div>
+    <div class="nav-links">
+      <a href="#about">Profil</a>
+      <a href="#skills">Compétences</a>
+      <a href="#experience">Expériences</a>
+      <a href="#projects">Projets</a>
+      <a href="#contact" class="nav-cta">Contact</a>
     </div>
-  );
-}
+  </nav>
+
+  <section id="hero">
+    <div>
+      <div class="hero-status"><span class="sdot"></span>Dernière année · Centrale Casablanca</div>
+      <h1>ZERATI<br><span class="stroke">SAAD</span></h1>
+      <p class="hero-desc">Élève ingénieur spécialisé en <strong>Performance Industrielle</strong> et amélioration des procédés. Expert en analyse de données et <strong>IA appliquée à l'industrie</strong> pour optimiser les processus complexes.</p>
+      <div class="hero-actions">
+        <a href="mailto:saad.zerati@centrale-casablanca.ma" class="btn btn-p">✉ Me contacter</a>
+        <a href="https://www.linkedin.com/in/saad-zerati" target="_blank" class="btn btn-o">↗️ LinkedIn</a>
+      </div>
+      <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-text">Faire défiler</span></div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-avatar">SZ</div>
+      <div class="hc-name">Saad Zerati</div>
+      <div class="hc-role">Ingénieur Généraliste</div>
+      <div class="hc-div"></div>
+      <div class="hc-row"><span class="hc-lbl">Spécialité</span><span class="hc-val">Perf. Industrielle</span></div>
+      <div class="hc-row"><span class="hc-lbl">Focus IA</span><span class="hc-val">NLP & ML</span></div>
+      <div class="hc-row"><span class="hc-lbl">Outils</span><span class="hc-val">Python / SQL</span></div>
+      <div class="hc-row"><span class="hc-lbl">Langues</span><span class="hc-val">FR · EN</span></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="eyebrow reveal"><span class="ey-n">01</span><div class="ey-l"></div><span class="ey-t">Profil</span></div>
+    <h2 class="reveal">À propos <em>de moi</em></h2>
+    <div class="about-grid">
+      <div class="about-body reveal">
+        <p>Élève ingénieur en dernière année à <strong>Centrale Casablanca</strong> (Groupe Centrale Supélec), je me spécialise dans l'optimisation des flux et l'amélioration continue.</p>
+        <p>Mon approche combine une solide capacité d'analyse technique avec une dimension <strong>Data-Driven</strong>. J'ai notamment travaillé sur des systèmes d'authentification multimédia basés sur l'IA et l'automatisation de processus industriels complexes.</p>
+        <p>Orienté vers les enjeux de <strong>transfert de procédés</strong> et d'industrialisation, je souhaite apporter mon expertise dans des environnements technologiques exigeants.</p>
+      </div>
+      <div class="meta-list reveal">
+        <div class="meta-item"><div class="meta-ico">📍</div><div><div class="meta-lbl">Localisation</div><div class="meta-val">Paris, France</div></div></div>
+        <div class="meta-item"><div class="meta-ico">✉</div><div><div class="meta-lbl">Email</div><div class="meta-val">saad.zerati@centrale-casablanca.ma</div></div></div>
+        <div class="meta-item"><div class="meta-ico">📞</div><div><div class="meta-lbl">Téléphone</div><div class="meta-val">+33 7 45 75 41 27</div></div></div>
+        <div class="meta-item"><div class="meta-ico">🔗</div><div><div class="meta-lbl">LinkedIn</div><div class="meta-val"><a href="https://www.linkedin.com/in/saad-zerati" target="_blank">saad-zerati</a></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="eyebrow reveal"><span class="ey-n">02</span><div class="ey-l"></div><span class="ey-t">Compétences</span></div>
+    <h2 class="reveal">Expertise <em>&amp; Outils</em></h2>
+    <div class="skills-grid">
+      <div class="sk-block g reveal">
+        <div class="sk-head"><div class="sk-ico">⚙️</div><div class="sk-name">Industriel</div></div>
+        <div class="tags">
+          <span class="tag">Performance Industrielle</span><span class="tag">Lean Management</span><span class="tag">Supply Chain</span><span class="tag">Maintenance Opérationnelle</span><span class="tag">Analyse de données appliquée</span><span class="tag">Costing</span>
+        </div>
+      </div>
+      <div class="sk-block b reveal">
+        <div class="sk-head"><div class="sk-ico">💻</div><div class="sk-name">Tech & IA</div></div>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">NLP</span><span class="tag">Machine Learning</span><span class="tag">AWS</span><span class="tag">Power BI</span><span class="tag">Excel VBA</span><span class="tag">Odoo</span>
+        </div>
+      </div>
+      <div class="sk-block p reveal">
+        <div class="sk-head"><div class="sk-ico">📊</div><div class="sk-name">Management</div></div>
+        <div class="tags">
+          <span class="tag">Gestion de projet</span><span class="tag">Reporting</span><span class="tag">Rigueur</span><span class="tag">Résolution de problèmes</span><span class="tag">Travail en équipe</span><span class="tag">Transversalité</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="eyebrow reveal"><span class="ey-n">03</span><div class="ey-l"></div><span class="ey-t">Parcours</span></div>
+    <h2 class="reveal">Expériences <em>Professionnelles</em></h2>
+    <div class="timeline">
+      <div class="tl-rail"></div>
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-type">R&amp;D</div>
+          <div class="tl-top"><div class="tl-title">Développement Système IA</div><span class="tl-badge">Mars 2026 – Présent</span></div>
+          <div class="tl-co">CREATIVE CHANNEL · Paris, France</div>
+          <p class="tl-desc">Conception d'un système propriétaire d'authentification multimédia basé sur l'IA. Pilotage du développement front/back et structuration des développements en environnement complexe.</p>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-type">Stage IA</div>
+          <div class="tl-top"><div class="tl-title">Développement IA &amp; NLP</div><span class="tl-badge">Mai – Août 2025</span></div>
+          <div class="tl-co">CDG EPARGNE-PREVOYANCE</div>
+          <p class="tl-desc">Automatisation des processus d'habilitation via des pipelines NLP. Expérimentation et fine-tuning de modèles de machine learning pour améliorer les prédictions métier.</p>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-type">Stage Performance</div>
+          <div class="tl-top"><div class="tl-title">Performance Industrielle &amp; Maintenance</div><span class="tl-badge">Juin – Août 2024</span></div>
+          <div class="tl-co">OCP Group</div>
+          <p class="tl-desc">Analyse des processus de production et mise en place d'un plan de maintenance préventive. Suivi de la performance via indicateurs (KPI) et réduction des arrêts non planifiés.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="eyebrow reveal"><span class="ey-n">04</span><div class="ey-l"></div><span class="ey-t">Projets</span></div>
+    <h2 class="reveal">Projets <em>Phare</em></h2>
+    <div class="proj-grid">
+      <div class="proj-card wide reveal">
+        <div class="proj-cat">Optimisation Industrielle · LAFARGE HOLCIM</div>
+        <div class="proj-title">Logistique des Combustibles CSR</div>
+        <p class="proj-desc">Réduction du cycle de bioséchage de 40,5% (21 à 12,5 jours) et hausse de capacité à 151k t/an. Économie annuelle générée : 63 MDH via la réduction des coûts de production de 30%.</p>
+        <div class="proj-stack"><span class="stag">Supply Chain</span><span class="stag">Modélisation</span><span class="stag">Modèle 50 t/h</span></div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-cat">Innovation · SIANA (TGV Maroc)</div>
+        <div class="proj-title">Support Technique Rames TGV</div>
+        <p class="proj-desc">Conception d'un catalogue illustré technique et prototypes innovants pour optimiser les interventions de maintenance sur la flotte TGV.</p>
+        <div class="proj-stack"><span class="stag">Maintenance</span><span class="stag">Innovation</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-box reveal">
+      <h3>Travaillons <em>Ensemble</em></h3>
+      <p style="margin-bottom:30px">Je suis à l'écoute d'opportunités stimulantes en performance industrielle et ingénierie de données.</p>
+      <div class="cactions">
+        <a href="mailto:saad.zerati@centrale-casablanca.ma" class="btn btn-p">✉ Me contacter</a>
+        <a href="https://www.linkedin.com/in/saad-zerati" target="_blank" class="btn btn-o">↗️ LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="ft-logo">S<em>.</em>ZERATI</div>
+    <div class="ft-copy">&copy; 2026 — Portfolio Ingénieur</div>
+    <div class="ft-mono">CENTRALE CASABLANCA</div>
+  </footer>
+
+  <script>
+    const cg = document.getElementById('cg');
+    document.addEventListener('mousemove', e => {
+      cg.style.left = e.clientX + 'px';
+      cg.style.top = e.clientY + 'px';
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, {threshold: 0.1});
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
